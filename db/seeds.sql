@@ -10,7 +10,7 @@ VALUES
 (8, 'Maintenance'),
 (9, 'Custodial');
 
-INSERT INTO position(id, title, salary, department_id)
+INSERT INTO position (id, title, salary, department_id)
 VALUES 
 (1,'General Manager', 180.000, 1),
 (2,'Engineering Manager', 160.000, 2),
