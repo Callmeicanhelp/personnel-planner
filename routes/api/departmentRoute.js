@@ -12,7 +12,7 @@ router.get('/department', (req, res) => {
       return;
     }
     res.json({
-      message: 'success',
+      message: 'Retrieved all departments',
       data: rows
     });
   });
@@ -29,7 +29,7 @@ router.get('/department/:id', (req, res) => {
       return;
     }
     res.json({
-      message: 'success',
+      message: 'Retrieved department',
       data: row
     });
   });
@@ -48,7 +48,7 @@ router.delete('/department/:id', (req, res) => {
       });
     } else {
       res.json({
-        message: 'deleted',
+        message: 'Deleted department',
         changes: result.affectedRows,
         id: req.params.id
       });
