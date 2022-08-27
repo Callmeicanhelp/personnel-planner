@@ -1,7 +1,7 @@
 const {mainMenu, departmentQuestions, positionQuestions, employeeQuestions} = require('./questions');
 const consoleTable = require('console.table');
 const inquirer = require('inquirer');
-const db = require('./config/connection');
+const db = require('./db/connection');
 const PORT = process.env.PORT || 3005;
 const express = require('express');
 const app = express();
