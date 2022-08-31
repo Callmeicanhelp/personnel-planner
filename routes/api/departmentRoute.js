@@ -1,9 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../../db/connection');
+const db = require("../../db/connection");
+// const inputCheck = require('../../utils/inputCheck');
 
 // Get all departments
-router.get('/department', (req, res) => {
+router.get("/department", (req, res) => {
   const sql = `SELECT * FROM department`;
 
   db.query(sql, (err, rows) => {
@@ -12,14 +13,14 @@ router.get('/department', (req, res) => {
       return;
     }
     res.json({
-      message: 'Retrieved all departments',
-      data: rows
+      message: "Retrieved all departments",
+      data: rows,
     });
   });
 });
 
 // Get single department
-router.get('/department/:id', (req, res) => {
+router.get("/department/:id", (req, res) => {
   const sql = `SELECT * FROM department WHERE id = ?`;
   const params = [req.params.id];
 
@@ -29,14 +30,14 @@ router.get('/department/:id', (req, res) => {
       return;
     }
     res.json({
-      message: 'Retrieved department',
-      data: row
+      message: "Retrieved department",
+      data: row,
     });
   });
 });
 
 // Delete a department
-router.delete('/department/:id', (req, res) => {
+router.delete("/department/:id", (req, res) => {
   const sql = `DELETE FROM department WHERE id = ?`;
 
   db.query(sql, req.params.id, (err, result) => {
@@ -44,13 +45,13 @@ router.delete('/department/:id', (req, res) => {
       res.status(400).json({ error: res.message });
     } else if (!result.affectedRows) {
       res.json({
-        message: 'Department not found'
+        message: "Department not found",
       });
     } else {
       res.json({
-        message: 'Deleted department',
+        message: "Deleted department",
         changes: result.affectedRows,
-        id: req.params.id
+        id: req.params.id,
       });
     }
   });

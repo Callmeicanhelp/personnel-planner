@@ -8,11 +8,12 @@
     "sequelize": "^6.21.1"
   },
   "name": "employee-tracker",
-  "description": "",
+  "description": "Employee tracking app",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "jest",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/Callmeicanhelp/employee-tracker/issues"
   },
-  "homepage": "https://github.com/Callmeicanhelp/employee-tracker#readme"
+  "homepage": "https://github.com/Callmeicanhelp/employee-tracker#readme",
+  "devDependencies": {
+    "jest": "^29.0.1"
+  }
 }

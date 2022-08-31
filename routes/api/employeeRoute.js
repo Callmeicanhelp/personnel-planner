@@ -6,7 +6,7 @@ const inputCheck = require('../../utils/inputCheck');
 // Get all employees
 router.get('/employee', (req, res) => {
   const sql = `SELECT employee.*, department.name 
-                AS party_name 
+                AS position 
                 FROM employee 
                 LEFT JOIN department 
                 ON employee.department_id = department.id`;
@@ -26,7 +26,7 @@ router.get('/employee', (req, res) => {
 // Get single employee
 router.get('/employee/:id', (req, res) => {
   const sql = `SELECT employee.*, department.name 
-               AS party_name 
+               AS position 
                FROM employee 
                LEFT JOIN department 
                ON employee.department_id = department.id 
