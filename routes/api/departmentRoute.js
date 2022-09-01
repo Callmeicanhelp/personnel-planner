@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db/connection");
-// const inputCheck = require('../../utils/inputCheck');
+const inputCheck = require("../../utils/inputCheck");
 
 // Get all departments
 router.get("/department", (req, res) => {
@@ -32,6 +32,30 @@ router.get("/department/:id", (req, res) => {
     res.json({
       message: "Retrieved department",
       data: row,
+    });
+  });
+});
+
+// Add a new department
+router.post("/department", ({ body }, res) => {
+  const errors = inputCheck(body, "department_name");
+  if (errors) {
+    res.status(400).json({ error: errors });
+    return;
+  }
+
+  const sql = `INSERT INTO department (department_name) VALUES (?)`;
+  const params = [body.department_name];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "New department added",
+      changes: result.affectedRows,
+      data: body,
     });
   });
 });

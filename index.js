@@ -3,6 +3,7 @@ const {
   departmentQuestions,
   positionQuestions,
   employeeQuestions,
+  updateEmployeeQuestions,
 } = require("./questions");
 const consoleTable = require("console.table");
 const inquirer = require("inquirer");
@@ -119,6 +120,7 @@ function addDep() {
       function (err, results) {
         console.log("\n");
         console.log(`${answers.addDep} added to list of departments`);
+        console.table(results);
       }
     );
     allChoices();
@@ -133,6 +135,7 @@ function addPositions() {
       function (err, results) {
         console.log(`\n`);
         console.log(`${answers.addPositionsName} added to list of positions`);
+        console.table(results);
       }
     );
     allChoices();
@@ -149,23 +152,27 @@ function addEmployee() {
         console.log(
           `${answers.firstName} ${answers.lastName} added to list of employees`
         );
+        console.table(results);
       }
     );
+    allChoices();
   });
 }
 
 function updateEmployee() {
-  inquirer.prompt(updateEmployee).then((answers) => {
+  inquirer.prompt(updateEmployeeQuestions).then((answers) => {
     console.log(answers);
     db.query(
-      `UPDATE employee SET(first_name, last_name, employee_id, manager_id) WHERE`,
+      `UPDATE employee SET(first_name, last_name, new_employee_position, new_employee_manager) VALUES ('${answers.firstName}', ${answers.lastName}',${answers.newEmployeeposition},${answers.newEmployeeManager})`,
       function (err, results) {
         console.log(`\n`);
         console.log(
           `${answers.firstName} ${answers.lastName} added to list of employees`
         );
+        console.table(results);
       }
     );
+    allChoices();
   });
 }
 
@@ -175,7 +182,7 @@ db.connect((err) => {
   console.log("Database connected.");
   app.get("/", (req, res) => {
     res.json({
-      message: "Hello World",
+      message: "App running",
     });
   });
   app.listen(PORT, () => {

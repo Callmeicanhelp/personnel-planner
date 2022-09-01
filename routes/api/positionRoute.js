@@ -1,15 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../../db/connection');
-const inputCheck = require('../../utils/inputCheck');
+const db = require("../../db/connection");
+const inputCheck = require("../../utils/inputCheck");
 
-// Get all employees
-router.get('/employee', (req, res) => {
-  const sql = `SELECT employee.*, department.name 
-                AS position 
-                FROM employee 
-                LEFT JOIN department 
-                ON employee.department_id = department.id`;
+// Get all positions
+router.get("/position", (req, res) => {
+  const sql = `SELECT * FROM position`;
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -17,55 +13,22 @@ router.get('/employee', (req, res) => {
       return;
     }
     res.json({
-      message: 'Retrieved all employees',
-      data: rows
+      message: "Retrievd all positions",
+      data: rows,
     });
   });
 });
 
-// Get single employee
-router.get('/employee/:id', (req, res) => {
-  const sql = `SELECT employee.*, department.name 
-               AS position 
-               FROM employee 
-               LEFT JOIN department 
-               ON employee.department_id = department.id 
-               WHERE employee.id = ?`;
-  const params = [req.params.id];
-
-  db.query(sql, params, (err, row) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Retrieved employee',
-      data: row
-    });
-  });
-});
-
-// Create an employee
-router.post('/employee', ({ body }, res) => {
-  const errors = inputCheck(
-    body,
-    'first_name',
-    'last_name',
-    'position_id',
-    'manager_id'
-  );
+// Add a new position
+router.post("/position", ({ body }, res) => {
+  const errors = inputCheck(body, "title", "salary", "department_id");
   if (errors) {
     res.status(400).json({ error: errors });
     return;
   }
 
-  const sql = `INSERT INTO employee (first_name, last_name, position_id, manager_id) VALUES (?,?,?,?)`;
-  const params = [
-    body.first_name,
-    body.last_name,
-    body.position_id,
-    body.manager_id
-  ];
+  const sql = `INSERT INTO position (title, salary, department_id) VALUES (?,?,?)`;
+  const params = [body.title, body.salary, body.department_id];
 
   db.query(sql, params, (err, result) => {
     if (err) {
@@ -73,57 +36,29 @@ router.post('/employee', ({ body }, res) => {
       return;
     }
     res.json({
-      message: 'Employee created',
-      data: body
+      message: "Position added",
+      changes: result.affectedRows,
+      data: body,
     });
   });
 });
 
-// Update an employee
-router.put('/employee/:id', (req, res) => {
-  const errors = inputCheck(req.body, 'department_id');
-  if (errors) {
-    res.status(400).json({ error: errors });
-    return;
-  }
-
-  const sql = `UPDATE employee SET department_id = ? 
-               WHERE id = ?`;
-  const params = [req.body.department_id, req.params.id];
-
-  db.query(sql, params, (err, result) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-    } else if (!result.affectedRows) {
-      res.json({
-        message: 'employee not found'
-      });
-    } else {
-      res.json({
-        message: 'Updated employee',
-        data: req.body,
-        changes: result.affectedRows
-      });
-    }
-  });
-});
-
-// Delete an employee
-router.delete('/employee/:id', (req, res) => {
-  const sql = `DELETE FROM employee WHERE id = ?`;
+// Delete a position
+router.delete("/position/:id", (req, res) => {
+  const sql = `DELETE FROM position WHERE id = ?`;
 
   db.query(sql, req.params.id, (err, result) => {
     if (err) {
       res.status(400).json({ error: res.message });
     } else if (!result.affectedRows) {
       res.json({
-        message: 'employee not found'
+        message: "Voter not found",
       });
     } else {
       res.json({
-        message: 'Deleted employee',
+        message: "Position deleted",
         changes: result.affectedRows,
-        id: req.params.id
+        id: req.params.id,
       });
     }
   });
